@@ -1,20 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, Component, Fragment } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
+
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+	const [isLogin, setIsLogin] = useState(false);
+	
+	const CheckLogin = async () => {
+		try {
+			let staffId = await AsyncStorage.getItem('staffId');
+			let token = await AsyncStorage.getItem('token');
+			if (staffId !== null && token !== null) {
+				// if token is not expired
+				let decoded = jwt_decode(token);
+				let currentTime = Date.now() / 1000;
+				console.log(decoded.exp, currentTime);
+				if (decoded.exp > currentTime) {
+					setIsLogin(true);
+				} else {
+					setIsLogin(false);
+				}
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+	<NavigationContainer>
+	  <Stack.Navigator>
+		{isLogin ? (
+			<Stack.Screen name="Home" component={HomeScreen} options={{
+				title: 'Home',
+			}} />
+		) : (
+			<Stack.Screen name="Login" component={LoginScreen} />
+		)}
+			<Stack.Screen name="Home" component={HomeScreen} />
+		</Stack.Navigator>
+	</NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
