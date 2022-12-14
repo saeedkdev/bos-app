@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Button } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Tasks from '../components/Tasks';
 
-const HomeScreen = ({navigation}) => {
-	
+const TasksScreen = ({navigation}) => {
 	const [staff, setStaff] = useState({});
 
 	// get staff info
@@ -77,7 +76,6 @@ const HomeScreen = ({navigation}) => {
 			),
 		});
 	}, [navigation]);
-
 	return (
 		<SafeAreaView className="bg-white h-screen">
 			<View className="p-5">
@@ -85,29 +83,13 @@ const HomeScreen = ({navigation}) => {
 				<Text className="text-lg text-gray-800 mb-5">
 					{staff.firstName} {staff.lastName}
 				</Text>
-				<View className="border border-gray-300 rounded-lg py-5 items-center">
-					<Text className="font-bold">Welcome to your BOS home screen</Text>
+				<View className="border border-gray-300 rounded-lg py-5 items-center mb-5">
+					<Text className="font-bold">Tasks Overview</Text>
 				</View>
-				{/*<Tasks />*/}
-				<ScrollView className="flex flex-row space-x-5 mt-5" horizontal={true} showsHorizontalScrollIndicator={false}>
-					<TouchableOpacity onPress={() => goToScreen('Tasks')}>
-						<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
-							<Text className="text-md font-bold">Tasks</Text>
-						</View>
-					</TouchableOpacity>
-					<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
-						<Text className="text-md font-bold">Chat</Text>
-					</View>
-					<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
-						<Text className="text-md font-bold">Leads</Text>
-					</View>
-					<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
-						<Text className="text-md font-bold">Customers</Text>
-					</View>
-				</ScrollView>
+				<Tasks />
 			</View>
 		</SafeAreaView>
 	);
 };
 
-export default HomeScreen;
+export default TasksScreen;

@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}) => {
 			return;
 		}
 		console.log(data);
-		axios.post('http://192.168.1.233/GI-Perfex/api/auth/login', data).then((response) => {
+		axios.post('http://192.168.0.26/GI-Perfex/api/auth/login', data).then((response) => {
 			let staffId = response.data.staffId;
 			let token = response.data.token;
 			AddToAsyncStorage(staffId, token);
@@ -85,8 +85,9 @@ const LoginScreen = ({navigation}) => {
 
 	return (
 		<SafeAreaView className="flex-1 justify-center items-center bg-white">
-			<Text className="text-gray-500 font-bold text-xl mb-3">Welcome to BOS app</Text>
-			<TextInput className="w-9/12 border-2 border-gray-300 rounded-md p-3 my-2" 
+			<Text className="text-gray-800 font-black text-3xl">BusinessOS</Text>
+			<Text className="text-gray-500 text-lg mb-3">Login with your BusinessOS account</Text>
+			<TextInput className="w-9/12 border-2 border-gray-500 rounded-md p-3 my-2" 
 				value={email}
 				onChangeText={(text) => setEmail(text)}
 				placeholder="Email" />
@@ -95,10 +96,10 @@ const LoginScreen = ({navigation}) => {
 				onChangeText={(text) => setPassword(text)}
 				textContentType="password"
 				secureTextEntry={true}
-				className="w-9/12 border-2 border-gray-300 rounded-md p-3 my-2" 
+				className="w-9/12 border-2 border-gray-500 rounded-md p-3 my-2" 
 				placeholder="Password" />
 			<Button
-				className="w-9/12 bg-blue-500 rounded-md p-3 my-2"
+				className="w-9/12 rounded-md p-3 my-2"
 				title="Login"
 				onPress={LoginToApp}
 			/>

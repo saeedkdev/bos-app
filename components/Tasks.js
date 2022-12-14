@@ -14,7 +14,7 @@ const Tasks = ({ navigation }) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				let response = await axios.get(`http://192.168.1.233/GI-Perfex/api/v1/getMyTasks/${staffId}`, {
+				let response = await axios.get(`http://192.168.0.26/GI-Perfex/api/v1/getMyTasks/${staffId}`, {
 					headers: {
 						Authorization: `${token}`,
 					},
@@ -33,12 +33,12 @@ const Tasks = ({ navigation }) => {
 	}, []);
 
 	return loading ? (
-		<View className="flex-1 items-center justify-center align-center">
+		<View className="flex-1 items-center justify-center align-center mt-5">
 			<ActivityIndicator size="large" color="#007bff" />
 		</View>
 		) : (
 		<SafeAreaView className="rounded-md">
-				<ScrollView className="flex flex-col">
+				<ScrollView className="flex flex-col mt-4" showsVerticalScrollIndicator={false}>
 						{tasks.map((task) => (
 						<View key={task.id} className="border border-gray-200 rounded-md p-2 mb-2 bg-white">
 							<Text className="text-md pb-2 border-bottom-1 border-gray-200">{task.name}</Text>
