@@ -7,6 +7,7 @@ import jwt_decode from 'jwt-decode';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import TasksScreen from './screens/TasksScreen';
+import ChatScreen from './screens/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,9 @@ export default function App() {
 			<Stack.Screen name="Tasks" component={TasksScreen} options={{
 				title: 'Tasks',
 			}} />
+			<Stack.Screen name="Chat" component={ChatScreen} options={{
+				title: 'Chat',
+			}} />'
 			</>
 		) : (
 			<Stack.Screen name="Login" component={LoginScreen} />
