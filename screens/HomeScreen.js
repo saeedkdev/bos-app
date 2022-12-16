@@ -204,7 +204,7 @@ const HomeScreen = ({navigation}) => {
 						onRequestClose={() => {
 							setModalVisible(!modalVisible);
 						}}>
-							<View className="flex flex-row mt-5">
+							<View className="justify-center  rounded-lg flex flex-row mt-5 p-5 bg-white">
 								<TextInput className="w-10/12 bg-white shadow rounded-md p-4 my-2" 
 									value={newTodo}
 									onChangeText={(text) => setNewTodo(text)}
