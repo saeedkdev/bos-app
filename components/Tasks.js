@@ -2,6 +2,9 @@ import { View, Text, SafeAreaView, ScrollView, StyleSheet, ActivityIndicator, Fl
 import React, { useLayoutEffect, useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  DotIndicator,
+} from 'react-native-indicators';
 
 const Tasks = ({ navigation }) => {
 
@@ -14,13 +17,12 @@ const Tasks = ({ navigation }) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				let response = await axios.get(`http://192.168.0.26/GI-Perfex/api/v1/getMyTasks/${staffId}`, {
+				let response = await axios.get(`http://192.168.1.233/GI-Perfex/api/v1/getMyTasks/${staffId}`, {
 					headers: {
 						Authorization: `${token}`,
 					},
 				});
 				setTasks(response.data.tasks);
-				console.log(tasks);
 				setLoading(false);
 			}
 		} catch (error) {
@@ -64,7 +66,7 @@ const Tasks = ({ navigation }) => {
 
 	return loading ? (
 		<View className="flex-1 items-center justify-center align-center mt-5">
-			<ActivityIndicator size="large" color="#007bff" />
+			<DotIndicator color="#374151" />
 		</View>
 		) : (
 		<SafeAreaView className="rounded-md">

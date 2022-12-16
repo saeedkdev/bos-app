@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}) => {
 			return;
 		}
 		console.log(data);
-		axios.post('http://192.168.0.26/GI-Perfex/api/auth/login', data).then((response) => {
+		axios.post('http://192.168.1.233/GI-Perfex/api/auth/login', data).then((response) => {
 			let staffId = response.data.staffId;
 			let token = response.data.token;
 			AddToAsyncStorage(staffId, token);
