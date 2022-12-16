@@ -32,44 +32,19 @@ const ChatScreen = ({navigation}) => {
 	const [conversations, setConversations] = useState([]);
 	const [loadingConversations, setLoadingConversations] = useState(true);
 
-	// get staff info
-	const getStaffInfo = async () => {
-		const staffId = await AsyncStorage.getItem('staffId');
-		const token = await AsyncStorage.getItem('token');
-
-		try {
-			if (staffId !== null && token !== null) {
-				let response = await axios.get(
-					`http://192.168.0.26/GI-Perfex/api/v1/getMyStaffProfile/${staffId}`,
-					{
-						headers: {
-							Authorization: `${token}`,
-						},
-					}
-				);
-				
-
-				let userInformation = {};
-				userInformation.firstName = response.data.staff.firstname;
-				userInformation.lastName = response.data.staff.lastname;
-				userInformation.email = response.data.staff.email;
-				userInformation.phoneNumber = response.data.staff.phonenumber;
-				userInformation.profileImage = response.data.staff.profile_image;
-				userInformation.staffId = staffId;
-				console.log(userInformation);
-				
-				setStaff(userInformation);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
 	const logout = async () => {
-		let response = await axios.get('http://192.168.0.26/GI-Perfex/api/auth/login');
+		let response = await axios.get('http://192.168.0.26/GI-Perfex/api/auth/logout');
 		console.log(response);
 		await AsyncStorage.removeItem('token');
 		await AsyncStorage.removeItem('staffId');
+		CometChat.logout().then(
+			() => {
+				console.log('Logout completed successfully');
+			},
+			error => {
+				console.log('Logout failed with exception:', { error });
+			}
+		);
 		navigation.navigate('Login');
 	};
 
@@ -83,32 +58,31 @@ const ChatScreen = ({navigation}) => {
 		CometChat.login(staffId, authKey).then(
 		  (user) => {
 			console.log('Login Successful:', { user });
+			let limit = 30;
+			let conversationsRequest = new CometChat.ConversationsRequestBuilder().setLimit(limit).build();
+			conversationsRequest.fetchNext().then(
+				conversationList => {
+					setConversations(conversationList);
+					setLoadingConversations(false);
+				},
+				error => {
+					console.log("Conversation list fetching failed with error:", error);
+				}
+			);
 		  },
 		  (error) => {
 			console.log('Login failed with exception:', { error });
 		  },
 		);
-		let limit = 30;
-		let conversationsRequest = new CometChat.ConversationsRequestBuilder().setLimit(limit).build();
-		conversationsRequest.fetchNext().then(
-			conversationList => {
-				console.log("Conversation list fetched:", conversationList);
-				setConversations(conversationList);
-				setLoadingConversations(false);
-			},
-			error => {
-				console.log("Conversation list fetching failed with error:", error);
-			}
-		);
 	};
 
 	useEffect(() => {
-		getStaffInfo();
-		// every 5 seconds, get the conversations
-		const interval = setInterval(() => {
-			getConversations();
-		}, 2000);
+		getConversations();
 	}, []);
+
+	const goToConversation = (userIdToChatWith) => {
+		navigation.navigate('Conversation', {userIdToChatWith: userIdToChatWith});
+	};
 	
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -143,7 +117,7 @@ const ChatScreen = ({navigation}) => {
 					{conversations.map((conversation) => (
 						<TouchableOpacity
 							key={conversation.conversationId}
-							onPress={() => goToScreen('Chat')}
+							onPress={() => goToConversation(conversation.conversationWith.uid)}
 						>
 							<View className="flex flex-row items-center p-4 bg-white rounded-lg shadow-lg mb-5">
 								<UserAvatar
