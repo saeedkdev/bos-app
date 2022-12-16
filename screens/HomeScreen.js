@@ -9,8 +9,15 @@ import {
 } from 'react-native-indicators';
 import { REACT_APP_BOS_API_URL } from '@env';
 import Modal from "react-native-modal";
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 
 import Tasks from '../components/Tasks';
+
+const Icon = createIconSetFromIcoMoon(
+  require('../assets/selection.json'),
+  'IcoMoon',
+  'icomoon.ttf'
+);
 
 const HomeScreen = ({navigation}) => {
 	
@@ -173,17 +180,33 @@ const HomeScreen = ({navigation}) => {
 				<ScrollView className="flex flex-row space-x-5 mt-5 p-5" horizontal={true} showsHorizontalScrollIndicator={false}>
 					<TouchableOpacity onPress={() => goToScreen('Tasks')}>
 						<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
-							<Text className="text-md font-bold text-gray-800">Tasks</Text>
+							<Icon name="icon_svg_tasks" size={20} color="#374151" />
+							<Text className="text-md font-bold text-gray-800 mt-2">Tasks</Text>
 						</View>
 					</TouchableOpacity>
 					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
-						<Text className="text-md font-bold">Chat</Text>
+						<Icon name="icon_svg_chat_old" size={25} color="#374151" />
+						<Text className="text-md font-bold text-gray-800 mt-2">Chat</Text>
 					</View>
 					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
-						<Text className="text-md font-bold">Leads</Text>
+						<Icon name="icon_svg_project" size={25} color="#374151" />
+						<Text className="text-md font-bold text-gray-800 mt-2">Projects</Text>
 					</View>
 					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
-						<Text className="text-md font-bold">Customers</Text>
+						<Icon name="icon_svg_leads" size={25} color="#374151" />
+						<Text className="text-md font-bold text-gray-800 mt-2">Leads</Text>
+					</View>
+					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
+						<Icon name="icon_svg_contacts" size={25} color="#374151" />
+						<Text className="text-md font-bold text-gray-800 mt-2">Customers</Text>
+					</View>
+					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
+						<Icon name="icon_svg_quote" size={25} color="#374151" />
+						<Text className="text-md font-bold text-gray-800 mt-2">Quotes</Text>
+					</View>
+					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
+						<Icon name="icon_svg_invoice" size={25} color="#374151" />
+						<Text className="text-md font-bold text-gray-800 mt-2">Invoices</Text>
 					</View>
 				</ScrollView>
 				<View className="flex px-5">

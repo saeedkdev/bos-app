@@ -3,6 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
+import { useFonts } from 'expo-font';
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -11,8 +13,21 @@ import ChatScreen from './screens/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
+const Icon = createIconSetFromIcoMoon(
+  require('./assets/selection.json'),
+  'IcoMoon',
+  'icomoon.ttf'
+);
+
 export default function App() {
 	const [isLogin, setIsLogin] = useState(false);
+	const [fontsLoaded] = useFonts({
+		IcoMoon: require('./assets/fonts/icomoon.ttf'),
+	});
+
+	if (!fontsLoaded) {
+		return null;
+	}
 	
 	const CheckLogin = async () => {
 		try {
