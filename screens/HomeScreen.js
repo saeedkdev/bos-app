@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity, TextInput, Pressable, Modal } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity, TextInput, Pressable } from 'react-native';
 import React, { Component, useLayoutEffect, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import {
   DotIndicator,
 } from 'react-native-indicators';
 import { REACT_APP_BOS_API_URL } from '@env';
+import Modal from "react-native-modal";
 
 import Tasks from '../components/Tasks';
 
@@ -89,20 +90,39 @@ const HomeScreen = ({navigation}) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				let response = await axios.post(
-					`${apiUrl}/v1/createTodo`,
-					{
-						headers: {
-							Authorization: `${token}`,
-						},
-						data: {
-							description: newTodo,
-							staffid: staffId,
-						},
-					}
-				);
+				const url = `${apiUrl}/v1/createTodo`;
+				const data = {
+					staffid: staffId,
+					description: newTodo,
+				};
+				console.log({data, url, token});
+				let response = await axios.post(url, data, {
+					headers: {
+						Authorization: `${token}`,
+					},
+				});
 				console.log(response.data);
-				setTodos(response.data.todos);
+				setNewTodo('');
+				setModalVisible(false);
+				getStaffTodos();
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const markTodoAsFinished = async (todoId) => {
+		const staffId = await AsyncStorage.getItem('staffId');
+		const token = await AsyncStorage.getItem('token');
+		try {
+			if (staffId !== null && token !== null) {
+				const url = `${apiUrl}/v1/markTodoAsFinished/${todoId}`;
+				let response = await axios.get(url, {
+					headers: {
+						Authorization: `${token}`,
+					},
+				});
+				getStaffTodos();
 			}
 		} catch (error) {
 			console.log(error);
@@ -194,22 +214,24 @@ const HomeScreen = ({navigation}) => {
 								paddingBottom={15}
 								fillColor="#3B82F6"
 								unfillColor="#fff"
+								onPress={(isChecked) => markTodoAsFinished(todo.todoid)}
 							/>
 						))}
 						</>
 					)}
 			
 						<Modal
-						animationType="slide"
-						visible={modalVisible}
-						presentationStyle="formSheet"
-						onRequestClose={() => {
-							setModalVisible(!modalVisible);
-						}}>
+							isVisible={modalVisible}
+							onBackdropPress={() => setModalVisible(false)}
+							onBackButtonPress={() => setModalVisible(false)}
+							animationIn="slideInUp"
+							animationOut="slideOutDown"
+						>
 							<View className="justify-center  rounded-lg flex flex-row mt-5 p-5 bg-white">
 								<TextInput className="w-10/12 bg-white shadow rounded-md p-4 my-2" 
 									value={newTodo}
 									onChangeText={(text) => setNewTodo(text)}
+									placeholderTextColor="#bdbdbd"
 									placeholder="New Todo" />
 								<Pressable className="w-1/6 bg-blue-500 shadow rounded-r-md p-4 my-2 justify-end" onPress={() => addTodo()}>
 									<Text className="text-white text-center">+</Text>

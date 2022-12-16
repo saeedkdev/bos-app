@@ -21,7 +21,7 @@ const Tasks = ({ navigation }) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				let response = await axios.get(`${apiUrl}v1/getMyTasks/${staffId}`, {
+				let response = await axios.get(`${apiUrl}/v1/getMyTasks/${staffId}`, {
 					headers: {
 						Authorization: `${token}`,
 					},
