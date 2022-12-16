@@ -35,7 +35,7 @@ const Tasks = ({ navigation }) => {
 
 	const Task = ({ name, duedate, status, status_name }) => {
 		return (
-			<View className="border border-gray-200 rounded-md p-2 mb-2 bg-white">
+			<View className="rounded-md p-2 mb-2 bg-white shadow">
 				<Text className="text-md pb-2 border-bottom-1 border-gray-200">{name}</Text>
 				<View className="flex flex-row justify-between">
 					{duedate !== null ? (

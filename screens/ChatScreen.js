@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CometChat } from '@cometchat-pro/react-native-chat';
-import { CometChatUI } from '@cometchat-pro/react-native-chat-ui-kit';
 
 const appID = '2278040d1ff15f21';
 const region = 'us';

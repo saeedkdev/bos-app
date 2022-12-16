@@ -3,6 +3,7 @@ import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import Tasks from '../components/Tasks';
 
@@ -62,7 +63,7 @@ const HomeScreen = ({navigation}) => {
 			// if back button goes to login screen, then disable it
 			headerLeft: null,
 			headerStyle: {
-				backgroundColor: '#3F3F3F',
+				backgroundColor: '#374151',
 			},
 			headerTintColor: '#fff',
 			headerTitleStyle: {
@@ -79,32 +80,54 @@ const HomeScreen = ({navigation}) => {
 	}, [navigation]);
 
 	return (
-		<SafeAreaView className="bg-white h-screen">
-			<View className="p-5">
-				<Text className="text-xl font-bold">Hi, </Text>
-				<Text className="text-lg text-gray-800 mb-5">
-					{staff.firstName} {staff.lastName}
-				</Text>
-				<View className="border border-gray-300 rounded-lg py-5 items-center">
-					<Text className="font-bold">Welcome to your BOS home screen</Text>
+		<SafeAreaView className="bg-gray-100 h-screen">
+			<View className="">
+				<View className="bg-gray-700 p-5">
+					<Text className="text-xl font-bold text-white">Hi, </Text>
+					<Text className="text-lg text-white mb-5">
+						{staff.firstName} {staff.lastName}
+					</Text>
+					<View className="border border-gray-300 rounded-lg py-5 items-center bg-white">
+						<Text className="font-bold">Welcome to your BusinessOS App</Text>
+					</View>
 				</View>
 				{/*<Tasks />*/}
-				<ScrollView className="flex flex-row space-x-5 mt-5" horizontal={true} showsHorizontalScrollIndicator={false}>
+				<ScrollView className="flex flex-row space-x-5 mt-5 p-5" horizontal={true} showsHorizontalScrollIndicator={false}>
 					<TouchableOpacity onPress={() => goToScreen('Tasks')}>
-						<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
-							<Text className="text-md font-bold">Tasks</Text>
+						<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
+							<Text className="text-md font-bold text-gray-800">Tasks</Text>
 						</View>
 					</TouchableOpacity>
-					<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
+					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
 						<Text className="text-md font-bold">Chat</Text>
 					</View>
-					<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
+					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
 						<Text className="text-md font-bold">Leads</Text>
 					</View>
-					<View className="flex text-center p-5 h-20 justify-center items-center border border-gray-300 rounded-lg text-gray-800">
+					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
 						<Text className="text-md font-bold">Customers</Text>
 					</View>
 				</ScrollView>
+				<View className="flex px-5">
+					<Text className="text-xl font-bold text-gray-800 py-5">Todos</Text>
+					<BouncyCheckbox
+						iconStyle={{ borderColor: "#374151" }}
+						textStyle={{ color: "#000" }}
+						text="Change Task 123 status to complete"
+						size={20}
+						fillColor="#3B82F6"
+						unfillColor="#fff"
+					/>
+					<BouncyCheckbox
+						iconStyle={{ borderColor: "#374151" }}
+						textStyle={{ color: "#000" }}
+						text="Test the BOS Features before Launch"
+						size={20}
+						fillColor="#3B82F6"
+						unfillColor="#fff"
+						paddingTop={15}
+					/>
+				</View>
 			</View>
 		</SafeAreaView>
 	);

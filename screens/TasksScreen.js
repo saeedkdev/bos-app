@@ -13,30 +13,6 @@ const TasksScreen = ({navigation}) => {
 	const getStaffInfo = async () => {
 		const staffId = await AsyncStorage.getItem('staffId');
 		const token = await AsyncStorage.getItem('token');
-		try {
-			if (staffId !== null && token !== null) {
-				let response = await axios.get(
-					`http://192.168.0.26/GI-Perfex/api/v1/getMyStaffProfile/${staffId}`,
-					{
-						headers: {
-							Authorization: `${token}`,
-						},
-					}
-				);
-				
-
-				let userInformation = {};
-				userInformation.firstName = response.data.staff.firstname;
-				userInformation.lastName = response.data.staff.lastname;
-				userInformation.email = response.data.staff.email;
-				userInformation.phoneNumber = response.data.staff.phonenumber;
-				userInformation.profileImage = response.data.staff.profile_image;
-				console.log(userInformation);
-				setStaff(userInformation);
-			}
-		} catch (error) {
-			console.log(error);
-		}
 	};
 
 	const logout = async () => {
@@ -61,7 +37,7 @@ const TasksScreen = ({navigation}) => {
 			// if back button goes to login screen, then disable it
 			headerLeft: null,
 			headerStyle: {
-				backgroundColor: '#3F3F3F',
+				backgroundColor: '#374151',
 			},
 			headerTintColor: '#fff',
 			headerTitleStyle: {
@@ -77,16 +53,16 @@ const TasksScreen = ({navigation}) => {
 		});
 	}, [navigation]);
 	return (
-		<SafeAreaView className="bg-white h-screen">
-			<View className="p-5">
-				<Text className="text-xl font-bold">Hi, </Text>
-				<Text className="text-lg text-gray-800 mb-5">
-					{staff.firstName} {staff.lastName}
-				</Text>
-				<View className="border border-gray-300 rounded-lg py-5 items-center mb-5">
-					<Text className="font-bold">Tasks Overview</Text>
+		<SafeAreaView className="h-screen">
+			<View className="">
+				<View className="bg-gray-700 p-5">
+					<View className="border border-gray-300 rounded-lg py-5 items-center bg-white">
+						<Text className="font-bold">Tasks Overview</Text>
+					</View>
 				</View>
-				<Tasks />
+				<View className="p-5">
+					<Tasks />
+				</View>
 			</View>
 		</SafeAreaView>
 	);

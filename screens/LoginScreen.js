@@ -1,5 +1,5 @@
 
-import { View, Text, SafeAreaView, TextInput, Button } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Button, Pressable } from 'react-native';
 import React, { useLayoutEffect, useState, createContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -84,10 +84,10 @@ const LoginScreen = ({navigation}) => {
 	};
 
 	return (
-		<SafeAreaView className="flex-1 justify-center items-center bg-white">
+		<SafeAreaView className="flex-1 justify-center items-center">
 			<Text className="text-gray-800 font-black text-3xl">BusinessOS</Text>
 			<Text className="text-gray-500 text-lg mb-3">Login with your BusinessOS account</Text>
-			<TextInput className="w-9/12 border-2 border-gray-500 rounded-md p-3 my-2" 
+			<TextInput className="w-9/12 bg-white shadow rounded-md p-4 my-2" 
 				value={email}
 				onChangeText={(text) => setEmail(text)}
 				placeholder="Email" />
@@ -96,13 +96,15 @@ const LoginScreen = ({navigation}) => {
 				onChangeText={(text) => setPassword(text)}
 				textContentType="password"
 				secureTextEntry={true}
-				className="w-9/12 border-2 border-gray-500 rounded-md p-3 my-2" 
+				className="w-9/12 bg-white shadow rounded-md p-4 my-2" 
 				placeholder="Password" />
-			<Button
-				className="w-9/12 rounded-md p-3 my-2"
+			<Pressable
+				className="w-20 bg-blue-500 shadow rounded-md p-4 my-2"
 				title="Login"
 				onPress={LoginToApp}
-			/>
+			>
+				<Text className="text-white text-center font-bold">Login</Text>
+			</Pressable>
 		</SafeAreaView>
 	);
 }
