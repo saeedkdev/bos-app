@@ -189,6 +189,7 @@ const HomeScreen = ({navigation}) => {
 								textStyle={{ color: "#000" }}
 								text={todo.description}
 								size={20}
+								paddingBottom={15}
 								fillColor="#3B82F6"
 								unfillColor="#fff"
 							/>
