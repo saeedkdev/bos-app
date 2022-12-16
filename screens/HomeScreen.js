@@ -7,6 +7,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {
   DotIndicator,
 } from 'react-native-indicators';
+import { REACT_APP_BOS_API_URL } from '@env';
 
 import Tasks from '../components/Tasks';
 
@@ -17,6 +18,7 @@ const HomeScreen = ({navigation}) => {
 	const [newTodo, setNewTodo] = useState('');
 	const [loadingTodos, setLoadingTodos] = useState(true);
 	const [modalVisible, setModalVisible] = useState(false);
+	const apiUrl = REACT_APP_BOS_API_URL;
 
 	// get staff info
 	const getStaffInfo = async () => {
@@ -25,7 +27,7 @@ const HomeScreen = ({navigation}) => {
 		try {
 			if (staffId !== null && token !== null) {
 				let response = await axios.get(
-					`http://192.168.1.233/GI-Perfex/api/v1/getMyStaffProfile/${staffId}`,
+					`${apiUrl}/v1/getMyStaffProfile/${staffId}`,
 					{
 						headers: {
 							Authorization: `${token}`,
@@ -54,7 +56,7 @@ const HomeScreen = ({navigation}) => {
 		try {
 			if (staffId !== null && token !== null) {
 				let response = await axios.get(
-					`http://192.168.1.233/GI-Perfex/api/v1/getMyTodos`,
+					`${apiUrl}/v1/getMyTodos`,
 					{
 						headers: {
 							Authorization: `${token}`,
@@ -71,7 +73,7 @@ const HomeScreen = ({navigation}) => {
 	};
 
 	const logout = async () => {
-		let response = await axios.get('http://192.168.1.233/GI-Perfex/api/auth/login');
+		let response = await axios.get(apiUrl+'/auth/logout');
 		console.log(response);
 		await AsyncStorage.removeItem('token');
 		await AsyncStorage.removeItem('staffId');
@@ -88,7 +90,7 @@ const HomeScreen = ({navigation}) => {
 		try {
 			if (staffId !== null && token !== null) {
 				let response = await axios.post(
-					`http://192.168.1.233/GI-Perfex/api/v1/createTodo`,
+					`${apiUrl}/v1/createTodo`,
 					{
 						headers: {
 							Authorization: `${token}`,

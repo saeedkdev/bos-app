@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
+import { REACT_APP_BOS_API_URL } from '@env';
 
 const AuthContext = createContext();
 
@@ -12,6 +13,9 @@ const AuthContext = createContext();
 const LoginScreen = ({navigation}) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const apiUrl = REACT_APP_BOS_API_URL;
+	console.log(apiUrl);
+	console.log(process.env);
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -61,8 +65,9 @@ const LoginScreen = ({navigation}) => {
 			alert('Please enter email and password');
 			return;
 		}
-		console.log(data);
-		axios.post('http://192.168.1.233/GI-Perfex/api/auth/login', data).then((response) => {
+		let url = `${apiUrl}/auth/login`;
+		console.log(url);
+		axios.post(url, data).then((response) => {
 			let staffId = response.data.staffId;
 			let token = response.data.token;
 			AddToAsyncStorage(staffId, token);

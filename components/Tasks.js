@@ -6,10 +6,14 @@ import {
   DotIndicator,
 } from 'react-native-indicators';
 
+
+import { REACT_APP_BOS_API_URL } from '@env';
+
 const Tasks = ({ navigation }) => {
 
 	const [tasks, setTasks] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const apiUrl = REACT_APP_BOS_API_URL;
 
 	const getTasks = async () => {
 		setLoading(true);
@@ -17,7 +21,7 @@ const Tasks = ({ navigation }) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				let response = await axios.get(`http://192.168.1.233/GI-Perfex/api/v1/getMyTasks/${staffId}`, {
+				let response = await axios.get(`${apiUrl}v1/getMyTasks/${staffId}`, {
 					headers: {
 						Authorization: `${token}`,
 					},

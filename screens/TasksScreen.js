@@ -3,11 +3,13 @@ import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { REACT_APP_BOS_API_URL } from '@env';
 
 import Tasks from '../components/Tasks';
 
 const TasksScreen = ({navigation}) => {
 	const [staff, setStaff] = useState({});
+	const apiUrl = REACT_APP_BOS_API_URL;
 
 	// get staff info
 	const getStaffInfo = async () => {
@@ -16,7 +18,7 @@ const TasksScreen = ({navigation}) => {
 	};
 
 	const logout = async () => {
-		let response = await axios.get('http://192.168.0.26/GI-Perfex/api/auth/login');
+		let response = await axios.get(apiUrl+'/auth/login');
 		console.log(response);
 		await AsyncStorage.removeItem('token');
 		await AsyncStorage.removeItem('staffId');
