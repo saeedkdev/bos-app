@@ -6,9 +6,16 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import { REACT_APP_BOS_API_URL } from '@env';
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 
 const AuthContext = createContext();
 
+
+const Icon = createIconSetFromIcoMoon(
+  require('../assets/selection.json'),
+  'IcoMoon',
+  'icomoon.ttf'
+);
 
 const LoginScreen = ({navigation}) => {
 	const [email, setEmail] = useState('');
@@ -90,7 +97,8 @@ const LoginScreen = ({navigation}) => {
 
 	return (
 		<SafeAreaView className="flex-1 justify-center items-center">
-			<Text className="text-gray-800 font-black text-3xl">BusinessOS</Text>
+			<Icon name="icon_svg_gi_no-ring" size={70} color="#374151" />
+			<Text className="text-gray-800 font-black text-3xl mt-5">BusinessOS</Text>
 			<Text className="text-gray-500 text-lg mb-3">Login with your BusinessOS account</Text>
 			<TextInput className="w-9/12 bg-white shadow rounded-md p-4 my-2" 
 				value={email}

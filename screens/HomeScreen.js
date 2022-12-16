@@ -184,10 +184,12 @@ const HomeScreen = ({navigation}) => {
 							<Text className="text-md font-bold text-gray-800 mt-2">Tasks</Text>
 						</View>
 					</TouchableOpacity>
-					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
-						<Icon name="icon_svg_chat_old" size={25} color="#374151" />
-						<Text className="text-md font-bold text-gray-800 mt-2">Chat</Text>
-					</View>
+					<TouchableOpacity onPress={() => goToScreen('Chat')}>
+						<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
+							<Icon name="icon_svg_chat_old" size={25} color="#374151" />
+							<Text className="text-md font-bold text-gray-800 mt-2">Chat</Text>
+						</View>
+					</TouchableOpacity>
 					<View className="flex text-center p-5 h-20 justify-center items-center rounded-lg bg-white shadow-md">
 						<Icon name="icon_svg_project" size={25} color="#374151" />
 						<Text className="text-md font-bold text-gray-800 mt-2">Projects</Text>
@@ -251,13 +253,13 @@ const HomeScreen = ({navigation}) => {
 							animationOut="slideOutDown"
 						>
 							<View className="justify-center  rounded-lg flex flex-row mt-5 p-5 bg-white">
-								<TextInput className="w-10/12 bg-white shadow rounded-md p-4 my-2" 
+								<TextInput className="w-10/12 bg-white shadow rounded-l-md p-4 my-2" 
 									value={newTodo}
 									onChangeText={(text) => setNewTodo(text)}
 									placeholderTextColor="#bdbdbd"
 									placeholder="New Todo" />
 								<Pressable className="w-1/6 bg-blue-500 shadow rounded-r-md p-4 my-2 justify-end" onPress={() => addTodo()}>
-									<Text className="text-white text-center">+</Text>
+									<Icon name="icon_svg_paper_plane" size={20} color="#fff" />
 								</Pressable>
 							</View>
 					</Modal>

@@ -72,6 +72,9 @@ export default function App() {
 			<Stack.Screen name="Tasks" component={TasksScreen} options={{
 				title: 'Tasks',
 			}} />
+			<Stack.Screen name="Chat" component={ChatScreen} options={{
+				title: 'Chat',
+			}} />
 		</Stack.Navigator>
 	</NavigationContainer>
   );
