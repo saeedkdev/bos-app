@@ -44,10 +44,8 @@ const Conversation = ({route, navigation}) => {
 	const [msg, setMsg] = useState('');
 
 	const flatListRef = useRef();
-	console.log(flatListRef);
 
 	const { userIdToChatWith } = route.params;
-	console.log(userIdToChatWith);
 
 	const getChat = async () => {
 		let messagesRequest = new CometChat.MessagesRequestBuilder()
@@ -109,6 +107,7 @@ const Conversation = ({route, navigation}) => {
 
 	useEffect(() => {
 		getChat();
+		startListeningForMessages();
 	}, []);
 
 
@@ -126,24 +125,68 @@ const Conversation = ({route, navigation}) => {
 		);
 	};
 
+	const startListeningForMessages = async () => {
+		const staffId = await AsyncStorage.getItem('staffId');
+		let listenerID = 'STAFF_LISTENER'+staffId;
+		CometChat.addMessageListener(
+			listenerID,
+			new CometChat.MessageListener({
+				onTextMessageReceived: textMessage => {
+					console.log('Text message received successfully:', textMessage);
+					getChat();
+				},
+				onMediaMessageReceived: mediaMessage => {
+					console.log('Media message received successfully:', mediaMessage);
+				},
+				onCustomMessageReceived: customMessage => {
+					console.log('Custom message received successfully:', customMessage);
+				},
+				onTypingStarted: typingIndicator => {
+					console.log('Typing indicator started:', typingIndicator);
+				},
+				onTypingEnded: typingIndicator => {
+					console.log('Typing indicator ended:', typingIndicator);
+				},
+				onMessagesDelivered: messageReceipt => {
+					console.log('Messages delivered:', messageReceipt);
+				},
+				onMessagesRead: messageReceipt => {
+					console.log('Messages read:', messageReceipt);
+				},
+			})
+		);
+	};
+
 	const renderMessage = ({ item }) => {
 		if (item.sender.uid != userIdToChatWith) {
 			return (
-				<View className="flex flex-row justify-end mb-5">
+				<View className="flex flex-row justify-end mb-5"
+					onStartShouldSetResponder={() => true}
+				>
 					<View className="flex flex-row">
 						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-xl mr-3 max-w-xs">
 							<Text className="text-sm text-white">{item.text}</Text>
 						</View>
-						<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
+						{item.sender.avatar ? (
+							<UserAvatar className="h-10 w-10 rounded-full bg-white" name={item.sender.name} src={item.sender.avatar} />
+						) : (
+							<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
+						)}
 					</View>
 				</View>
 			);
 		} else {
 			return (
-				<View className="flex flex-row justify-start mb-5">
+				<View className="flex flex-row justify-start mb-5"
+					onStartShouldSetResponder={() => true}
+				>
 					<View className="flex flex-row">
-						<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
-				<View className="flex flex-col bg-gray-200 shadow p-3 rounded-xl ml-3" style={{ maxWidth: 250 }}>
+						{item.sender.avatar ? (
+							<UserAvatar className="h-10 w-10 rounded-full bg-white" name={item.sender.name} src={item.sender.avatar} />
+						) : (
+							<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
+						)}
+						<View className="flex flex-col bg-gray-200 shadow p-3 rounded-xl ml-3" style={{ maxWidth: 250 }}>
 							<Text className="text-sm text-gray-700">{item.text}</Text>
 						</View>
 					</View>
@@ -160,7 +203,7 @@ const Conversation = ({route, navigation}) => {
 				style={styles.container}
 				
 			>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss }>
 			<View style={styles.inner}
 			>
 				{loadingChat ? (

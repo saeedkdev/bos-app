@@ -119,7 +119,7 @@ const ChatScreen = ({navigation}) => {
 							key={conversation.conversationId}
 							onPress={() => goToConversation(conversation.conversationWith.uid)}
 						>
-							<View className="flex flex-row items-center p-4 bg-white rounded-lg">
+							<View className="flex flex-row items-center p-4 bg-white rounded-lg border-b border-gray-200">
 								<UserAvatar
 									size={50}
 									name={conversation.conversationWith.name}
