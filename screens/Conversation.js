@@ -116,9 +116,6 @@ const Conversation = ({route, navigation}) => {
 				console.log('Message sent successfully:', message);
 				setMsg('');
 				getChat();
-				// scroll flatlist to bottom
-				flatListRef.current.scrollToEnd({ animated: true });
-
 			},
 			error => {
 				console.log('Message sending failed with error:', error);
@@ -175,8 +172,9 @@ const Conversation = ({route, navigation}) => {
 						style={{ height: '80%' }}
 						initialScrollIndex={chat.length - 1}
 						getItemLayout={(data, index) => (
-							{ length: 10, offset: 40 * index, index }
+							{ length:0, offset: 50 * index, index }
 						)}
+						scrollToEnd={() => flatListRef.current.scrollToEnd({ animated: true })}
 					/>
 				)}
 				<View className="flex flex-row justify-between py-2">
