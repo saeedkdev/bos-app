@@ -78,6 +78,10 @@ const ChatScreen = ({navigation}) => {
 
 	useEffect(() => {
 		getConversations();
+		// update the conversations list every 5 seconds
+		const interval = setInterval(() => {
+			getConversations();
+		}, 5000);
 	}, []);
 
 	const goToConversation = (userIdToChatWith) => {
@@ -119,9 +123,9 @@ const ChatScreen = ({navigation}) => {
 							key={conversation.conversationId}
 							onPress={() => goToConversation(conversation.conversationWith.uid)}
 						>
-							<View className="flex flex-row items-center p-4 bg-white rounded-lg border-b border-gray-200">
+							<View className="flex flex-row items-center p-4 bg-white rounded-lg border-b border-gray-100">
 								<UserAvatar
-									size={50}
+									size={40}
 									name={conversation.conversationWith.name}
 									bgColor="#374151"
 									src={conversation.conversationWith.avatar}
@@ -134,6 +138,11 @@ const ChatScreen = ({navigation}) => {
 										{conversation.lastMessage.text}
 									</Text>
 								</View>
+								{conversation.unreadMessageCount > 0 && (
+									<View className="flex flex-row items-center justify-center h-7 w-7 ml-auto text-xs bg-blue-500 rounded-full">
+										<Text className="text-white">{conversation.unreadMessageCount}</Text>
+									</View>
+								)}
 							</View>
 						</TouchableOpacity>
 					))}

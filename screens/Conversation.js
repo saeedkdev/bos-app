@@ -54,10 +54,19 @@ const Conversation = ({route, navigation}) => {
 			.build();
 		messagesRequest.fetchPrevious().then(
 			messages => {
-				console.log('Message list fetched:', messages);
 				setChat(messages);
 				setLoadingChat(false);
 				flatListRef.current.scrollToEnd({ animated: true });
+				// mark as read
+				messages.forEach(message => {
+					if (message.getSender().getUid() !== staff.staffid && typeof message.getReadAt() === 'undefined') {
+						CometChat.markAsRead(message).then(
+							() => {
+								console.log('Message marked as read');
+							}
+						);
+					}
+				});
 			}
 		).catch(
 			error => {
@@ -69,7 +78,6 @@ const Conversation = ({route, navigation}) => {
 
 	const logout = async () => {
 		let response = await axios.get('http://192.168.0.26/GI-Perfex/api/auth/logout');
-		console.log(response);
 		await AsyncStorage.removeItem('token');
 		await AsyncStorage.removeItem('staffId');
 		CometChat.logout().then(
@@ -77,8 +85,8 @@ const Conversation = ({route, navigation}) => {
 				console.log('Logout completed successfully');
 			},
 			error => {
-				console.log('Logout failed with exception:', { error });
-			}
+		console.log('Logout failed with exception:', { error });
+		}
 		);
 		navigation.navigate('Login');
 	};
@@ -115,7 +123,6 @@ const Conversation = ({route, navigation}) => {
 		let textMessage = new CometChat.TextMessage(userIdToChatWith, msg, CometChat.RECEIVER_TYPE.USER);
 		CometChat.sendMessage(textMessage).then(
 			message => {
-				console.log('Message sent successfully:', message);
 				setMsg('');
 				getChat();
 			},
@@ -132,7 +139,6 @@ const Conversation = ({route, navigation}) => {
 			listenerID,
 			new CometChat.MessageListener({
 				onTextMessageReceived: textMessage => {
-					console.log('Text message received successfully:', textMessage);
 					getChat();
 				},
 				onMediaMessageReceived: mediaMessage => {
@@ -168,9 +174,9 @@ const Conversation = ({route, navigation}) => {
 							<Text className="text-sm text-white">{item.text}</Text>
 						</View>
 						{item.sender.avatar ? (
-							<UserAvatar className="h-10 w-10 rounded-full bg-white" name={item.sender.name} src={item.sender.avatar} />
+							<UserAvatar bgColor="#fff" size={40} name={item.sender.name} src={item.sender.avatar} />
 						) : (
-							<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
+							<UserAvatar bgColor="#fff" name={item.sender.name} size={40} />
 						)}
 					</View>
 				</View>
@@ -182,9 +188,9 @@ const Conversation = ({route, navigation}) => {
 				>
 					<View className="flex flex-row">
 						{item.sender.avatar ? (
-							<UserAvatar className="h-10 w-10 rounded-full bg-white" name={item.sender.name} src={item.sender.avatar} />
+							<UserAvatar bgColor="#fff" size={40} name={item.sender.name} src={item.sender.avatar} />
 						) : (
-							<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
+							<UserAvatar bgColor="#ffF" size={40} name={item.sender.name} />
 						)}
 						<View className="flex flex-col bg-gray-200 shadow p-3 rounded-xl ml-3" style={{ maxWidth: 250 }}>
 							<Text className="text-sm text-gray-700">{item.text}</Text>
