@@ -1,4 +1,5 @@
-import { View, Text, TextInput, SafeAreaView, FlatList, Button, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { View, Text, TextInput, SafeAreaView, FlatList, Button, 
+	TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -43,6 +44,7 @@ const Conversation = ({route, navigation}) => {
 	const [msg, setMsg] = useState('');
 
 	const flatListRef = useRef();
+	console.log(flatListRef);
 
 	const { userIdToChatWith } = route.params;
 	console.log(userIdToChatWith);
@@ -57,6 +59,7 @@ const Conversation = ({route, navigation}) => {
 				console.log('Message list fetched:', messages);
 				setChat(messages);
 				setLoadingChat(false);
+				flatListRef.current.scrollToEnd({ animated: true });
 			}
 		).catch(
 			error => {
@@ -128,10 +131,10 @@ const Conversation = ({route, navigation}) => {
 			return (
 				<View className="flex flex-row justify-end mb-5">
 					<View className="flex flex-row">
-						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-lg mr-3 max-w-xs">
+						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-xl mr-3 max-w-xs">
 							<Text className="text-sm text-white">{item.text}</Text>
 						</View>
-						<UserAvatar className="h-10" size={40} name={item.sender.name} />
+						<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
 					</View>
 				</View>
 			);
@@ -139,8 +142,8 @@ const Conversation = ({route, navigation}) => {
 			return (
 				<View className="flex flex-row justify-start mb-5">
 					<View className="flex flex-row">
-						<UserAvatar className="h-10" size={40} name={item.sender.name} />
-						<View className="flex flex-col justify-start bg-gray-200 shadow p-3 rounded-lg ml-3">
+						<UserAvatar className="h-10 w-10 rounded-full" name={item.sender.name} />
+				<View className="flex flex-col bg-gray-200 shadow p-3 rounded-xl ml-3" style={{ maxWidth: 250 }}>
 							<Text className="text-sm text-gray-700">{item.text}</Text>
 						</View>
 					</View>
@@ -149,15 +152,17 @@ const Conversation = ({route, navigation}) => {
 		}
 	};
 
-
 	return (
 		<SafeAreaView className="bg-white h-screen">
 			<KeyboardAvoidingView
 				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={70}
-				className="flex flex-col justify-between h-full"
+				keyboardVerticalOffset={10}
+				style={styles.container}
+				
 			>
-			<View className="p-5">
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<View style={styles.inner}
+			>
 				{loadingChat ? (
 					<View className="flex-1 items-center justify-center align-center mt-5">
 						<DotIndicator color="#374151" />
@@ -169,12 +174,8 @@ const Conversation = ({route, navigation}) => {
 						renderItem={renderMessage}
 						keyExtractor={item => item.id}
 						showsVerticalScrollIndicator={false}
-						style={{ height: '80%' }}
-						initialScrollIndex={chat.length - 1}
-						getItemLayout={(data, index) => (
-							{ length:0, offset: 50 * index, index }
-						)}
-						scrollToEnd={() => flatListRef.current.scrollToEnd({ animated: true })}
+						onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+						onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
 					/>
 				)}
 				<View className="flex flex-row justify-between py-2">
@@ -191,9 +192,22 @@ const Conversation = ({route, navigation}) => {
 					</TouchableOpacity>
 				</View>
 			</View>
+			</TouchableWithoutFeedback>
 			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 };
 
 export default Conversation;
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+	inner: {
+		paddingBottom: 80,
+		paddingLeft: 15,
+		paddingRight: 15,
+		flex: 1,
+	},
+});
