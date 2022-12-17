@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, FlatList, Button, TouchableOpacity } from 'react-native';
-import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { View, Text, TextInput, SafeAreaView, FlatList, Button, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,7 @@ import UserAvatar from 'react-native-user-avatar';
 import {
   DotIndicator,
 } from 'react-native-indicators';
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 
 const appID = '2278040d1ff15f21';
 const region = 'us';
@@ -27,12 +28,21 @@ CometChat.init(appID, appSetting).then(
 );
 
 
+const Icon = createIconSetFromIcoMoon(
+  require('../assets/selection.json'),
+  'IcoMoon',
+  'icomoon.ttf'
+);
+
 const Conversation = ({route, navigation}) => {
 
 	const [staff, setStaff] = useState({});
 	const [chat, setChat] = useState([]);
 	const [loadingChat, setLoadingChat] = useState(true);
 	const [messages, setMessages] = useState([]);
+	const [msg, setMsg] = useState('');
+
+	const flatListRef = useRef();
 
 	const { userIdToChatWith } = route.params;
 	console.log(userIdToChatWith);
@@ -99,23 +109,40 @@ const Conversation = ({route, navigation}) => {
 	}, []);
 
 
+	const sendMessage = async () => {
+		let textMessage = new CometChat.TextMessage(userIdToChatWith, msg, CometChat.RECEIVER_TYPE.USER);
+		CometChat.sendMessage(textMessage).then(
+			message => {
+				console.log('Message sent successfully:', message);
+				setMsg('');
+				getChat();
+				// scroll flatlist to bottom
+				flatListRef.current.scrollToEnd({ animated: true });
+
+			},
+			error => {
+				console.log('Message sending failed with error:', error);
+			}
+		);
+	};
+
 	const renderMessage = ({ item }) => {
 		if (item.sender.uid != userIdToChatWith) {
 			return (
 				<View className="flex flex-row justify-end mb-5">
-					<View className="flex flex-row justify-end">
-						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-lg mr-3">
+					<View className="flex flex-row">
+						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-lg mr-3 max-w-xs">
 							<Text className="text-sm text-white">{item.text}</Text>
 						</View>
-						<UserAvatar size={40} name={item.sender.name} />
+						<UserAvatar className="h-10" size={40} name={item.sender.name} />
 					</View>
 				</View>
 			);
 		} else {
 			return (
 				<View className="flex flex-row justify-start mb-5">
-					<View className="flex flex-row justify-start">
-						<UserAvatar size={40} name={item.sender.name} />
+					<View className="flex flex-row">
+						<UserAvatar className="h-10" size={40} name={item.sender.name} />
 						<View className="flex flex-col justify-start bg-gray-200 shadow p-3 rounded-lg ml-3">
 							<Text className="text-sm text-gray-700">{item.text}</Text>
 						</View>
@@ -125,21 +152,48 @@ const Conversation = ({route, navigation}) => {
 		}
 	};
 
+
 	return (
 		<SafeAreaView className="bg-white h-screen">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				keyboardVerticalOffset={70}
+				className="flex flex-col justify-between h-full"
+			>
 			<View className="p-5">
-			{loadingChat ? (
-				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-					<DotIndicator color="#374151" />
+				{loadingChat ? (
+					<View className="flex-1 items-center justify-center align-center mt-5">
+						<DotIndicator color="#374151" />
+					</View>
+				) : (
+					<FlatList
+						ref={flatListRef}
+						data={chat}
+						renderItem={renderMessage}
+						keyExtractor={item => item.id}
+						showsVerticalScrollIndicator={false}
+						style={{ height: '80%' }}
+						initialScrollIndex={chat.length - 1}
+						getItemLayout={(data, index) => (
+							{ length: 10, offset: 40 * index, index }
+						)}
+					/>
+				)}
+				<View className="flex flex-row justify-between py-2">
+					<TextInput
+						placeholder="Type a message"
+						className="bg-gray-200 rounded-full p-3 w-5/6"
+						value={msg}
+						onChangeText={text => setMsg(text)}
+					/>
+					<TouchableOpacity 
+						onPress={() => sendMessage()}
+						className="bg-blue-500 rounded-full p-3">
+						<Icon name="icon_svg_paper_plane" size={20} color="#fff" />
+					</TouchableOpacity>
 				</View>
-			) : (
-				<FlatList
-					data={chat}
-					renderItem={renderMessage}
-					keyExtractor={item => item.id}
-				/>
-			)}
 			</View>
+			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 };
