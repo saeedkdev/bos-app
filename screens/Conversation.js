@@ -10,7 +10,10 @@ import {
   DotIndicator,
 } from 'react-native-indicators';
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
+import { REACT_APP_BOS_API_URL } from '@env';
 
+
+const apiUrl = REACT_APP_BOS_API_URL;
 const appID = '2278040d1ff15f21';
 const region = 'us';
 const authKey = '86239a6e1000cb3200d6f34f79cd8cedee7bd443';
@@ -42,6 +45,7 @@ const Conversation = ({route, navigation}) => {
 	const [loadingChat, setLoadingChat] = useState(true);
 	const [messages, setMessages] = useState([]);
 	const [msg, setMsg] = useState('');
+	const [isTyping, setIsTyping] = useState(false);
 
 	const flatListRef = useRef();
 
@@ -77,7 +81,7 @@ const Conversation = ({route, navigation}) => {
 
 
 	const logout = async () => {
-		let response = await axios.get('http://192.168.0.26/GI-Perfex/api/auth/logout');
+		let response = await axios.get(apiUrl+'/auth/logout');
 		await AsyncStorage.removeItem('token');
 		await AsyncStorage.removeItem('staffId');
 		CometChat.logout().then(
@@ -149,9 +153,11 @@ const Conversation = ({route, navigation}) => {
 				},
 				onTypingStarted: typingIndicator => {
 					console.log('Typing indicator started:', typingIndicator);
+					setIsTyping(true);
 				},
 				onTypingEnded: typingIndicator => {
 					console.log('Typing indicator ended:', typingIndicator);
+					setIsTyping(false);
 				},
 				onMessagesDelivered: messageReceipt => {
 					console.log('Messages delivered:', messageReceipt);
@@ -226,6 +232,14 @@ const Conversation = ({route, navigation}) => {
 						onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
 						onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
 					/>
+				)}
+				{isTyping && ( 
+					<View className="flex flex-row justify-start mb-5">
+						<View className="px-2 flex-row">
+							<Text className="text-sm text-gray-300 mr-7">Typing</Text>
+							<DotIndicator color="#ebebeb" size={5} />
+						</View>
+					</View>
 				)}
 				<View className="flex flex-row justify-between py-2">
 					<TextInput

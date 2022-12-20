@@ -8,6 +8,7 @@ import UserAvatar from 'react-native-user-avatar';
 import {
   DotIndicator,
 } from 'react-native-indicators';
+import { REACT_APP_BOS_API_URL } from '@env';
 
 const appID = '2278040d1ff15f21';
 const region = 'us';
@@ -31,9 +32,10 @@ const ChatScreen = ({navigation}) => {
 	const [staff, setStaff] = useState({});
 	const [conversations, setConversations] = useState([]);
 	const [loadingConversations, setLoadingConversations] = useState(true);
+	const apiUrl = REACT_APP_BOS_API_URL;
 
 	const logout = async () => {
-		let response = await axios.get('http://192.168.0.26/GI-Perfex/api/auth/logout');
+		let response = await axios.get(apiUrl+'/auth/logout');
 		console.log(response);
 		await AsyncStorage.removeItem('token');
 		await AsyncStorage.removeItem('staffId');
