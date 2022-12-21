@@ -8,11 +8,11 @@ import UserAvatar from 'react-native-user-avatar';
 import {
   DotIndicator,
 } from 'react-native-indicators';
-import { REACT_APP_BOS_API_URL } from '@env';
+import { REACT_APP_BOS_API_URL, COMET_CHAT_APP_ID, COMET_CHAT_AUTH_KEY, COMET_CHAT_REGION } from '@env';
 
-const appID = '2278040d1ff15f21';
-const region = 'us';
-const authKey = '86239a6e1000cb3200d6f34f79cd8cedee7bd443';
+const appID = COMET_CHAT_APP_ID;
+const region = COMET_CHAT_REGION;
+const authKey = COMET_CHAT_AUTH_KEY;
 const appSetting = new CometChat.AppSettingsBuilder()
 	.subscribePresenceForAllUsers()
 	.setRegion(region)
@@ -29,7 +29,6 @@ CometChat.init(appID, appSetting).then(
 
 const ChatScreen = ({navigation}) => {
 
-	const [staff, setStaff] = useState({});
 	const [conversations, setConversations] = useState([]);
 	const [loadingConversations, setLoadingConversations] = useState(true);
 	const apiUrl = REACT_APP_BOS_API_URL;
@@ -48,10 +47,6 @@ const ChatScreen = ({navigation}) => {
 			}
 		);
 		navigation.navigate('Login');
-	};
-
-	const goToScreen = (screen) => {
-		navigation.navigate(screen);
 	};
 
 	const getConversations = async () => {

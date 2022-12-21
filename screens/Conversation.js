@@ -10,13 +10,13 @@ import {
   DotIndicator,
 } from 'react-native-indicators';
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
-import { REACT_APP_BOS_API_URL } from '@env';
+import { REACT_APP_BOS_API_URL, COMET_CHAT_APP_ID, COMET_CHAT_AUTH_KEY, COMET_CHAT_REGION } from '@env';
 
 
 const apiUrl = REACT_APP_BOS_API_URL;
-const appID = '2278040d1ff15f21';
-const region = 'us';
-const authKey = '86239a6e1000cb3200d6f34f79cd8cedee7bd443';
+const appID = COMET_CHAT_APP_ID;
+const region = COMET_CHAT_REGION;
+const authKey = COMET_CHAT_AUTH_KEY;
 const appSetting = new CometChat.AppSettingsBuilder()
 	.subscribePresenceForAllUsers()
 	.setRegion(region)
@@ -46,6 +46,9 @@ const Conversation = ({route, navigation}) => {
 	const [messages, setMessages] = useState([]);
 	const [msg, setMsg] = useState('');
 	const [isTyping, setIsTyping] = useState(false);
+	const [isSent, setIsSent] = useState(false);
+	const [isDelivered, setIsDelivered] = useState(false);
+	const [isRead, setIsRead] = useState(false);
 
 	const flatListRef = useRef();
 
@@ -129,6 +132,7 @@ const Conversation = ({route, navigation}) => {
 			message => {
 				setMsg('');
 				getChat();
+				setIsSent(true);
 			},
 			error => {
 				console.log('Message sending failed with error:', error);
@@ -161,9 +165,11 @@ const Conversation = ({route, navigation}) => {
 				},
 				onMessagesDelivered: messageReceipt => {
 					console.log('Messages delivered:', messageReceipt);
+					setIsDelivered(true);
 				},
 				onMessagesRead: messageReceipt => {
 					console.log('Messages read:', messageReceipt);
+					setIsRead(true);
 				},
 			})
 		);
@@ -176,7 +182,7 @@ const Conversation = ({route, navigation}) => {
 					onStartShouldSetResponder={() => true}
 				>
 					<View className="flex flex-row">
-						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-xl mr-3 max-w-xs">
+						<View className="flex flex-col justify-end bg-blue-500 shadow p-3 rounded-2xl mr-3 max-w-xs">
 							<Text className="text-sm text-white">{item.text}</Text>
 						</View>
 						{item.sender.avatar ? (
@@ -198,7 +204,7 @@ const Conversation = ({route, navigation}) => {
 						) : (
 							<UserAvatar bgColor="#ffF" size={40} name={item.sender.name} />
 						)}
-						<View className="flex flex-col bg-gray-200 shadow p-3 rounded-xl ml-3" style={{ maxWidth: 250 }}>
+						<View className="flex flex-col bg-gray-200 shadow p-3 rounded-2xl ml-3" style={{ maxWidth: 250 }}>
 							<Text className="text-sm text-gray-700">{item.text}</Text>
 						</View>
 					</View>
