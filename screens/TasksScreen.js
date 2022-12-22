@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Button } from 'react-native';
+import { View, Text, SafeAreaView, Pressable } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -46,11 +46,13 @@ const TasksScreen = ({navigation}) => {
 				fontWeight: 'bold',
 			},
 			headerRight: () => (
-				<Button
-					onPress={() => logout()}
-					title="Logout"
-					color="#fff"
-				/>
+				<Pressable
+					style={{backgroundColor: '#374151', padding: 10}}
+					onPress={() => {
+						logout();
+					}}>
+					<Text style={{color: '#fff'}}>Logout</Text>
+				</Pressable>
 			),
 		});
 	}, [navigation]);

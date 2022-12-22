@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Pressable, TouchableOpacity, Modal } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 import axios from 'axios';
@@ -113,11 +113,13 @@ const ChatScreen = ({navigation}) => {
 				fontWeight: 'bold',
 			},
 			headerRight: () => (
-				<Button
-					onPress={() => logout()}
-					title="Logout"
-					color="#fff"
-				/>
+				<Pressable
+					style={{backgroundColor: '#374151', padding: 10}}
+					onPress={() => {
+						logout();
+					}}>
+					<Text style={{color: '#fff'}}>Logout</Text>
+				</Pressable>
 			),
 		});
 	}, [navigation]);

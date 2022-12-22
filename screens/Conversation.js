@@ -1,4 +1,4 @@
-import { View, Text, TextInput, SafeAreaView, FlatList, Button, 
+import { View, Text, TextInput, SafeAreaView, FlatList, Pressable, 
 	TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -111,11 +111,13 @@ const Conversation = ({route, navigation}) => {
 				fontWeight: 'bold',
 			},
 			headerRight: () => (
-				<Button
-					onPress={() => logout()}
-					title="Logout"
-					color="#fff"
-				/>
+				<Pressable
+					style={{backgroundColor: '#374151', padding: 10}}
+					onPress={() => {
+						logout();
+					}}>
+					<Text style={{color: '#fff'}}>Logout</Text>
+				</Pressable>
 			),
 		});
 	}, [navigation]);
