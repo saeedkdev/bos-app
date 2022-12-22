@@ -256,7 +256,7 @@ const Conversation = ({route, navigation}) => {
 					/>
 					<TouchableOpacity 
 						onPress={() => sendMessage()}
-						className="bg-blue-500 rounded-full p-3">
+						className="bg-blue-500 rounded-full p-3 h-11 w-11">
 						<Icon name="icon_svg_paper_plane" size={20} color="#fff" />
 					</TouchableOpacity>
 				</View>

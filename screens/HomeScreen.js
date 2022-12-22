@@ -1,6 +1,5 @@
 import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity, TextInput, Pressable } from 'react-native';
 import React, { Component, useLayoutEffect, useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -11,7 +10,6 @@ import { REACT_APP_BOS_API_URL } from '@env';
 import Modal from "react-native-modal";
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 
-import Tasks from '../components/Tasks';
 
 const Icon = createIconSetFromIcoMoon(
   require('../assets/selection.json'),
@@ -155,11 +153,13 @@ const HomeScreen = ({navigation}) => {
 				fontWeight: 'bold',
 			},
 			headerRight: () => (
-				<Button
-					onPress={() => logout()}
-					title="Logout"
-					color="#fff"
-				/>
+				<Pressable
+					style={{backgroundColor: '#374151', padding: 10}}
+					onPress={() => {
+						logout();
+					}}>
+					<Text style={{color: '#fff'}}>Logout</Text>
+				</Pressable>
 			),
 		});
 	}, [navigation]);

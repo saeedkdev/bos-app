@@ -1,6 +1,6 @@
-import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity, Modal } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CometChat } from '@cometchat-pro/react-native-chat';
@@ -10,9 +10,10 @@ import {
 } from 'react-native-indicators';
 import { REACT_APP_BOS_API_URL, COMET_CHAT_APP_ID, COMET_CHAT_AUTH_KEY, COMET_CHAT_REGION } from '@env';
 
+import ChatUsers from '../components/ChatUsers';
+
 const appID = COMET_CHAT_APP_ID;
 const region = COMET_CHAT_REGION;
-const authKey = COMET_CHAT_AUTH_KEY;
 const appSetting = new CometChat.AppSettingsBuilder()
 	.subscribePresenceForAllUsers()
 	.setRegion(region)
@@ -27,10 +28,19 @@ CometChat.init(appID, appSetting).then(
 	}
 );
 
+
+const Icon = createIconSetFromIcoMoon(
+  require('../assets/selection.json'),
+  'IcoMoon',
+  'icomoon.ttf'
+);
+
 const ChatScreen = ({navigation}) => {
 
 	const [conversations, setConversations] = useState([]);
 	const [loadingConversations, setLoadingConversations] = useState(true);
+	const [staffModalVisible, setStaffModalVisible] = useState(false);
+
 	const apiUrl = REACT_APP_BOS_API_URL;
 
 	const logout = async () => {
@@ -51,7 +61,7 @@ const ChatScreen = ({navigation}) => {
 
 	const getConversations = async () => {
 		const staffId = await AsyncStorage.getItem('staffId');
-		const authKey = '86239a6e1000cb3200d6f34f79cd8cedee7bd443';
+		const authKey = COMET_CHAT_AUTH_KEY;
 		CometChat.login(staffId, authKey).then(
 		  (user) => {
 			console.log('Login Successful:', { user });
@@ -83,6 +93,11 @@ const ChatScreen = ({navigation}) => {
 
 	const goToConversation = (userIdToChatWith) => {
 		navigation.navigate('Conversation', {userIdToChatWith: userIdToChatWith});
+	};
+
+	const showAvailableStaff = () => {
+		// open modal
+		setStaffModalVisible(true);
 	};
 	
 	useLayoutEffect(() => {
@@ -145,6 +160,35 @@ const ChatScreen = ({navigation}) => {
 					))}
 				</ScrollView>
 			)}
+			<View className="absolute bottom-40 w-full items-center">
+				<TouchableOpacity
+					onPress={() => showAvailableStaff()}
+				>
+					<View className="flex flex-row w-6/12 bg-blue-500 shadow rounded-full px-5 py-3 ">
+						<Icon name="icon_svg_plus" size={20} color="#fff" className="mt-1" />
+						<Text className="text-white font-bold ml-2 text-lg">New Chat</Text>
+					</View>
+				</TouchableOpacity>
+			</View>
+			<Modal 
+				onBackdropPress={() => setStaffModalVisible(false)}
+				animationType="slide"
+				presentationStyle="pageSheet"
+				visible={staffModalVisible}
+				onRequestClose={() => setStaffModalVisible(false)}
+			>
+				<View className="flex flex-row items-center h-auto p-5 border-b border-gray-200 justify-between">
+					<Text className="text-lg font-bold text-gray-700">Available Staff</Text>
+					<TouchableOpacity
+						onPress={() => setStaffModalVisible(false)}
+					>
+						<Icon name="icon_svg_close" size={15} color="#374151" />
+					</TouchableOpacity>
+				</View>
+				<ChatUsers	/>
+			</Modal>
+				
+			
 		</SafeAreaView>
 	);
 };
