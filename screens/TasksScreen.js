@@ -65,7 +65,7 @@ const TasksScreen = ({navigation}) => {
 					</View>
 				</View>
 				<View className="p-5">
-					<Tasks />
+					<Tasks navigation={navigation} />
 				</View>
 			</View>
 		</SafeAreaView>

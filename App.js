@@ -12,6 +12,7 @@ import LoginScreen from './screens/LoginScreen';
 import TasksScreen from './screens/TasksScreen';
 import ChatScreen from './screens/ChatScreen';
 import Conversation from './screens/Conversation';
+import TaskDetails from './screens/TaskDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -70,6 +71,9 @@ export default function App() {
 			<Stack.Screen name="Conversation" component={Conversation} options={{
 				title: 'Conversation',
 			}} />
+			<Stack.Screen name="TaskDetails" component={TaskDetails} options={{
+				title: 'Task Details',
+			}} />
 			</>
 		) : (
 			<Stack.Screen name="Login" component={LoginScreen} />
@@ -83,6 +87,9 @@ export default function App() {
 			}} />
 			<Stack.Screen name="Conversation" component={Conversation} options={{
 				title: 'Conversation',
+			}} />
+			<Stack.Screen name="TaskDetails" component={TaskDetails} options={{
+				title: 'Task Details',
 			}} />
 		</Stack.Navigator>
 	</NavigationContainer>

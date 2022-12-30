@@ -1,10 +1,13 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, ActivityIndicator, FlatList, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, ActivityIndicator,
+	FlatList, Pressable, TouchableOpacity } from 'react-native';
 import React, { useLayoutEffect, useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   DotIndicator,
 } from 'react-native-indicators';
+
+import { useNavigation } from '@react-navigation/native';
 
 import {
   Menu,
@@ -23,11 +26,12 @@ const Icon = createIconSetFromIcoMoon(
   'icomoon.ttf'
 );
 
-const Tasks = ({ navigation }) => {
+const Tasks = ({navigation}) => {
 
 	const [tasks, setTasks] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const apiUrl = REACT_APP_BOS_API_URL;
+
 
 	const getTasks = async () => {
 		setLoading(true);
@@ -47,13 +51,21 @@ const Tasks = ({ navigation }) => {
 			console.log(error);
 		}
 	};
+
+	const openTask = (taskId) => {
+		navigation.navigate('TaskDetails', { taskId: taskId });
+	};
 	
 	useEffect(() => {
 		getTasks();
 	}, []);
 
-	const Task = ({ name, duedate, status, status_name }) => {
+	const Task = ({ taskId, name, duedate, status, status_name }) => {
+		console.log(taskId);
 		return (
+			<TouchableOpacity onPress={() => {
+				openTask(taskId);
+			}}>
 			<View className="rounded-md p-5 mb-2 bg-white shadow min-h-32">
 				<View className="flex flex-row justify-between border-b border-gray-200 pb-2">
 					<Text className="text-lg ">{name}</Text>
@@ -105,10 +117,11 @@ const Tasks = ({ navigation }) => {
 					)}
 				</View>
 			</View>
+			</TouchableOpacity>
 		);
 	};
 
-	const renderItem = ({ item }) => <Task name={item.name} duedate={item.duedate} status={item.status} status_name={item.status_name} />;
+	const renderItem = ({ item }) => <Task taskId={item.id} name={item.name} duedate={item.duedate} status={item.status} status_name={item.status_name} />;
 
 	return loading ? (
 		<View className="flex-1 items-center justify-center align-center mt-5">
