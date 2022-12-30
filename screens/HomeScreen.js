@@ -33,7 +33,7 @@ const HomeScreen = ({navigation}) => {
 		try {
 			if (staffId !== null && token !== null) {
 				let response = await axios.get(
-					`${apiUrl}/v1/getMyStaffProfile/${staffId}`,
+					`${apiUrl}/v1/misc/getMyStaffProfile/${staffId}`,
 					{
 						headers: {
 							Authorization: `${token}`,
@@ -62,7 +62,7 @@ const HomeScreen = ({navigation}) => {
 		try {
 			if (staffId !== null && token !== null) {
 				let response = await axios.get(
-					`${apiUrl}/v1/getMyTodos`,
+					`${apiUrl}/v1/misc/getMyTodos`,
 					{
 						headers: {
 							Authorization: `${token}`,
@@ -95,7 +95,7 @@ const HomeScreen = ({navigation}) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				const url = `${apiUrl}/v1/createTodo`;
+				const url = `${apiUrl}/v1/misc/createTodo`;
 				const data = {
 					staffid: staffId,
 					description: newTodo,
@@ -121,7 +121,7 @@ const HomeScreen = ({navigation}) => {
 		const token = await AsyncStorage.getItem('token');
 		try {
 			if (staffId !== null && token !== null) {
-				const url = `${apiUrl}/v1/markTodoAsFinished/${todoId}`;
+				const url = `${apiUrl}/v1/misc/markTodoAsFinished/${todoId}`;
 				let response = await axios.get(url, {
 					headers: {
 						Authorization: `${token}`,

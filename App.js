@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import { useFonts } from 'expo-font';
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -52,6 +53,7 @@ export default function App() {
 
 
   return (
+	<MenuProvider>
 	<NavigationContainer>
 	  <Stack.Navigator>
 		{isLogin ? (
@@ -84,5 +86,6 @@ export default function App() {
 			}} />
 		</Stack.Navigator>
 	</NavigationContainer>
+	</MenuProvider>
   );
 }

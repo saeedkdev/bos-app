@@ -239,6 +239,7 @@ const Conversation = ({route, navigation}) => {
 						showsVerticalScrollIndicator={false}
 						onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
 						onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
+						className="pt-5"
 					/>
 				)}
 				{isTyping && ( 

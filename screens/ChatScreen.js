@@ -92,6 +92,7 @@ const ChatScreen = ({navigation}) => {
 	}, []);
 
 	const goToConversation = (userIdToChatWith) => {
+		setStaffModalVisible(false);
 		navigation.navigate('Conversation', {userIdToChatWith: userIdToChatWith});
 	};
 
