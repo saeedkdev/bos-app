@@ -53,6 +53,7 @@ const Tasks = ({navigation}) => {
 	};
 
 	const openTask = (taskId) => {
+		console.log(taskId);
 		navigation.navigate('TaskDetails', { taskId: taskId });
 	};
 	
@@ -61,7 +62,6 @@ const Tasks = ({navigation}) => {
 	}, []);
 
 	const Task = ({ taskId, name, duedate, status, status_name }) => {
-		console.log(taskId);
 		return (
 			<TouchableOpacity onPress={() => {
 				openTask(taskId);
